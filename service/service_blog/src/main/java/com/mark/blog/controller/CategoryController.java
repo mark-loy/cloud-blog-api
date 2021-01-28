@@ -140,7 +140,7 @@ public class CategoryController {
      * @return Result
      */
     @ApiOperation("批量删除分类")
-    @DeleteMapping("/")
+    @DeleteMapping("/batch")
     public Result deleteBatchCategory(@ApiParam("分类id集合") @RequestParam("cidList") List<String> cidList) {
         categoryService.removeByIds(cidList);
         return Result.ok();

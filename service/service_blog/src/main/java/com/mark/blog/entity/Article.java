@@ -58,6 +58,9 @@ public class Article implements Serializable {
     @ApiModelProperty(value = "图片链接地址")
     private String linkUrl;
 
+    @ApiModelProperty(value = "文章发布状态;0.表示未发布，1.表示已发布")
+    private Boolean isReleased;
+
     @ApiModelProperty(value = "逻辑删除;0.表示未删除，1.表示已删除")
     @TableLogic
     private Boolean isDeleted;

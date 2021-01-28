@@ -1,28 +1,34 @@
 package com.mark.blog.service.impl;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.mark.base.valid.Group;
-import com.mark.blog.entity.*;
+import com.mark.base.enums.CustomExceptionEnum;
+import com.mark.base.exception.CustomException;
+import com.mark.blog.entity.Article;
+import com.mark.blog.entity.ArticleContent;
+import com.mark.blog.entity.ArticleTag;
 import com.mark.blog.entity.vo.ArticleFormVO;
 import com.mark.blog.entity.vo.ArticleQueryVO;
 import com.mark.blog.entity.vo.ArticleResponseVO;
+import com.mark.blog.entity.vo.ArticleStaVO;
 import com.mark.blog.helper.ArticleServiceHelper;
 import com.mark.blog.helper.ArticleTagServiceHelper;
 import com.mark.blog.mapper.ArticleMapper;
-import com.mark.blog.service.*;
+import com.mark.blog.service.ArticleContentService;
+import com.mark.blog.service.ArticleService;
+import com.mark.blog.service.ArticleTagService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -65,8 +71,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         if (!StringUtils.isEmpty(articleQuery.getTitle())) {
             articleWrapper.like("title", articleQuery.getTitle());
         }
-        if (!StringUtils.isEmpty(articleQuery.getCategoryId())) {
-            articleWrapper.eq("category_id", articleQuery.getCategoryId());
+        if (!StringUtils.isEmpty(articleQuery.getIsReleased())) {
+            articleWrapper.eq("is_released", articleQuery.getIsReleased());
         }
         if (articleQuery.getBegin() != null) {
             articleWrapper.ge("gmt_create", articleQuery.getBegin());
@@ -99,14 +105,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return resultMap;
     }
 
-
     /**
      * 保存文章数据及关联数据
      *
      * @param articleFormVO 文章表单对象
      */
     @Override
-    public void saveArticle(ArticleFormVO articleFormVO) {
+    public String saveArticle(ArticleFormVO articleFormVO) {
         // 保存文章数据
         Article article = new Article();
         // 设置文章数据
@@ -118,8 +123,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         ArticleContent articleContent = new ArticleContent();
         // 设置文章id
         articleContent.setId(article.getId());
-        // 设置文章内容
-        articleContent.setContent(articleFormVO.getContent());
+        if (!StringUtils.isEmpty(articleFormVO.getContent())) {
+            articleContent.setContent(articleFormVO.getContent());
+        } else {
+            // 设置文章内容为空
+            articleContent.setContent("");
+        }
+
         // 执行保存
         articleContentService.save(articleContent);
 
@@ -130,6 +140,27 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<ArticleTag> articleTags = articleTagServiceHelper.tagIdsConversionTags(tagIds, article.getId());
         // 执行保存
         articleTagService.saveBatch(articleTags);
+
+        return article.getId();
+    }
+
+    /**
+     * 保存并发布文章数据
+     * @param articleFormVO 文章表单对象
+     */
+    @Override
+    public void saveArticlePublish(ArticleFormVO articleFormVO) {
+        // 保存文章数据
+        String articleId = saveArticle(articleFormVO);
+
+        // 修改文章发布状态
+        Article article = new Article();
+        // 设置文章id
+        article.setId(articleId);
+        // 设置文章为发布状态
+        article.setIsReleased(true);
+        // 执行修改
+        baseMapper.updateById(article);;
     }
 
     /**
@@ -179,6 +210,24 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     /**
+     * 修改并发布文章
+     * @param articleFormVO 文章表单对象
+     */
+    @Override
+    public void updateArticlePublish(ArticleFormVO articleFormVO) {
+        // 修改文章数据
+        updateArticle(articleFormVO);
+        // 修改文章发布状态
+        Article article = new Article();
+        // 设置文章id
+        article.setId(articleFormVO.getId());
+        // 设置文章发布状态
+        article.setIsReleased(true);
+        // 执行修改
+        baseMapper.updateById(article);
+    }
+
+    /**
      * 删除文章数据及关联数据
      * @param articleId 文章id
      */
@@ -205,5 +254,63 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         for (String articleId : articlesId) {
             this.deleteArticle(articleId);
         }
+    }
+
+    /**
+     * 生成统计数据
+     * @param date 日期
+     * @return Map<String, Object>
+     */
+    @Override
+    public Map<String, Object> generateStaData(String date) {
+        // 获取当前文章的总浏览数、评论数、点赞数
+        ArticleStaVO currentCount = baseMapper.generateStaData(date);
+        // 获取昨前一天文章的总浏览数、评论数、点赞数
+        // 获取前一天的日期
+        DateTime yesterday = DateUtil.offsetDay(DateUtil.parseDate(date), -1);
+        ArticleStaVO yesterdayCount = baseMapper.generateStaData(yesterday.toString("yyyy-MM-dd"));
+
+        // 获取当天的发表文章数量
+        Integer publishCount = currentCount.getPublishCount();
+
+        // 判断前一天的统计数据是否为null
+        if (yesterdayCount.getViewCount() == null) {
+            yesterdayCount.setViewCount(0);
+        }
+        if (yesterdayCount.getCommentCount() == null) {
+            yesterdayCount.setCommentCount(0);
+        }
+        if (yesterdayCount.getLikeCount() == null) {
+            yesterdayCount.setLikeCount(0);
+        }
+        // 拿当天的减去前一天的浏览数、评论数、点赞数
+        Integer viewCount =  currentCount.getViewCount() - yesterdayCount.getViewCount();
+        Integer commentCount =  currentCount.getCommentCount() - yesterdayCount.getCommentCount();
+        Integer likeCount =  currentCount.getLikeCount() - yesterdayCount.getLikeCount();
+
+        Map<String, Object> map = new HashMap<>(3);
+        map.put("viewNum", viewCount);
+        map.put("commentNum", commentCount);
+        map.put("likeNum", likeCount);
+        map.put("publishNum", publishCount);
+        return map;
+    }
+
+    /**
+     * 修改文章的发布状态
+     * @param articleId 文章id
+     * @param isReleased 是否发布
+     */
+    @Override
+    public void updateArticleStatus(String articleId, Boolean isReleased) {
+        // 查询文章数据
+        Article article = baseMapper.selectById(articleId);
+        if (article == null) {
+            throw new CustomException(CustomExceptionEnum.NO_ARTICLE);
+        }
+        // 设置文章的发布状态
+        article.setIsReleased(isReleased);
+        // 执行修改
+        baseMapper.updateById(article);
     }
 }

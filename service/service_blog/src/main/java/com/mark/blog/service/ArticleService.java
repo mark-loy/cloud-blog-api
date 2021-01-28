@@ -7,6 +7,7 @@ import com.mark.blog.entity.vo.ArticleQueryVO;
 import com.mark.blog.entity.vo.ArticleFormVO;
 import com.mark.blog.entity.vo.ArticleResponseVO;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -23,8 +24,9 @@ public interface ArticleService extends IService<Article> {
     /**
      * 保存文章数据
      * @param articleFormVO 文章表单对象
+     * @return String
      */
-    void saveArticle(ArticleFormVO articleFormVO);
+    String saveArticle(ArticleFormVO articleFormVO);
 
     /**
      * 多组合条件分页查询文章数据
@@ -59,4 +61,31 @@ public interface ArticleService extends IService<Article> {
      * @param articlesId 文章id集合
      */
     void deleteBatchArticle(List<String> articlesId);
+
+    /**
+     * 生成统计数据
+     * @param date 日期
+     * @return Map<String, Object>
+     */
+    Map<String, Object> generateStaData(String date);
+
+    /**
+     * 修改文章的发布状态
+     * @param articleId 文章id
+     * @param isReleased 是否发布
+     */
+    void updateArticleStatus(String articleId, Boolean isReleased);
+
+    /**
+     * 保存并发布文章数据
+     * @param articleFormVO 文章表单对象
+     */
+    void saveArticlePublish(ArticleFormVO articleFormVO);
+
+    /**
+     * 修改并发布文章数据
+     * @param articleFormVO 文章表单对象
+     */
+    void updateArticlePublish(ArticleFormVO articleFormVO);
+
 }

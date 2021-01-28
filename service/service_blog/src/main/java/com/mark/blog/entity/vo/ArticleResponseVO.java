@@ -1,11 +1,12 @@
 package com.mark.blog.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.mark.base.valid.Group;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -26,8 +27,14 @@ public class ArticleResponseVO implements Serializable {
     @ApiModelProperty(value = "文章标题")
     private String title;
 
+    @ApiModelProperty(value = "发表人id")
+    private String userId;
+
     @ApiModelProperty(value = "发表人名称")
     private String userName;
+
+    @ApiModelProperty(value = "分类id")
+    private String categoryId;
 
     @ApiModelProperty(value = "分类名称")
     private String categoryName;
@@ -50,8 +57,14 @@ public class ArticleResponseVO implements Serializable {
     @ApiModelProperty(value = "图片链接地址")
     private String linkUrl;
 
+    @ApiModelProperty(value = "文章发布状态;0.表示未发布，1.表示已发布")
+    private Boolean isReleased;
+
     @ApiModelProperty(value = "文章内容")
     private String content;
+
+    @ApiModelProperty(value = "标签id")
+    private List<String> tagIds;
 
     @ApiModelProperty(value = "标签名称集合")
     private List<String> tagsName;

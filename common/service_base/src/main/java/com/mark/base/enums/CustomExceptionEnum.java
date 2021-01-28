@@ -9,9 +9,21 @@ package com.mark.base.enums;
  */
 public enum CustomExceptionEnum {
     /**
-     * 文章内容为空
+     * 文章相关异常
      */
-    NO_ARTICLE_CONTENT(20001, "文章内容为空");
+    NO_ARTICLE(20001, "文章不存在"),
+    NO_ARTICLE_CONTENT(20001, "文章内容不存在"),
+
+    /**
+     * 服务调用相关异常
+     */
+    REQUEST_SERVICE_FAIL(20002, "服务调用失败"),
+
+    /**
+     * OSS服务相关
+     */
+    FILE_UPLOAD_ERROR(20003, "文件上传失败");
+
 
     private final Integer code;
     private final String msg;

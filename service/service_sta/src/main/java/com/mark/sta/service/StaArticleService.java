@@ -13,4 +13,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface StaArticleService extends IService<StaArticle> {
 
+    /**
+     * 保存统计数据
+     * @param date 日期
+     */
+    void saveArticleSta(String date);
 }

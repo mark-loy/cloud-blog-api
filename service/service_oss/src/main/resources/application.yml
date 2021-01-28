@@ -1,0 +1,35 @@
+# 服务端口
+server:
+  port: 6004
+
+spring:
+  # 环境设置
+  profiles:
+    active: dev
+  # 服务名
+  application:
+    name: service-oss
+  # json的全局时间格式
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  # 配置springCloud
+  cloud:
+    # 配置nacos注册中心
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  servlet:
+    # 设置上传文件大小
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+
+# OSS对象存储配置
+aliyun:
+  endpoint: oss-cn-beijing.aliyuncs.com
+  accessKeyId: LTAI4GHRz68KqbqfrrFeWufk
+  accessKeySecret: sl8OlNPFuY9kGljvavTp7IcqCuGNfS
+  oss:
+    bucketName: marker-fileupload
+    filePatten: images/muke/blog/dev

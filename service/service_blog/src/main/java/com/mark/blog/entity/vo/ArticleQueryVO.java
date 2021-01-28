@@ -19,8 +19,8 @@ public class ArticleQueryVO implements Serializable {
     @ApiModelProperty(value = "文章标题")
     private String title;
 
-    @ApiModelProperty(value = "分类id")
-    private String categoryId;
+    @ApiModelProperty(value = "文章发布状态;0.表示未发布，1.表示已发布")
+    private Boolean isReleased;
 
     @ApiModelProperty(value = "文章发布起始时间", example = "2021-01-22 16:46:21")
     private String begin;

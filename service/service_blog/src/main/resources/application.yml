@@ -19,6 +19,12 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  # 配置springCloud
+  cloud:
+    # 配置nacos注册中心
+    nacos:
+      discovery:
+        server-addr: localhost:8848
 
 # mybatis配置
 mybatis-plus:

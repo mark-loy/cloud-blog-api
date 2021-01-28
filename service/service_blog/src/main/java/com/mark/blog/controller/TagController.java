@@ -142,7 +142,7 @@ public class TagController {
      * @return Result
      */
     @ApiOperation("批量删除标签")
-    @DeleteMapping("/")
+    @DeleteMapping("/batch")
     public Result deleteBatchTag(@ApiParam("标签id集合") @RequestParam("tidList") List<String> tidList) {
         tagService.removeByIds(tidList);
         return Result.ok();

@@ -32,24 +32,12 @@ public class ArticleFormVO implements Serializable {
     private String title;
 
     @ApiModelProperty(value = "发表人id")
-    @NotBlank(message = "发表人ID不能为空", groups = {Group.Add.class})
+    @NotBlank(message = "发表人不能为空", groups = {Group.Add.class})
     private String userId;
 
     @ApiModelProperty(value = "分类id")
-    @NotBlank(message = "分类ID不能为空", groups = {Group.Add.class})
+    @NotBlank(message = "分类不能为空", groups = {Group.Add.class})
     private String categoryId;
-
-    @ApiModelProperty(value = "阅读数")
-    @Min(value = 0, message = "阅读数不能为负数", groups = {Group.Add.class, Group.Update.class} )
-    private Integer viewCount;
-
-    @ApiModelProperty(value = "点赞数")
-    @Min(value = 0, message = "点赞数不能为负数", groups = {Group.Add.class, Group.Update.class})
-    private Integer likeCount;
-
-    @ApiModelProperty(value = "评论数")
-    @Min(value = 0, message = "评论数不能为负数", groups = {Group.Add.class, Group.Update.class})
-    private Integer commentCount;
 
     @ApiModelProperty(value = "图片标题")
     private String imageTitle;
@@ -61,7 +49,6 @@ public class ArticleFormVO implements Serializable {
     private String linkUrl;
 
     @ApiModelProperty(value = "文章内容")
-    @NotBlank(message = "文章内容不能为空", groups = {Group.Add.class})
     private String content;
 
     @ApiModelProperty(value = "标签id")

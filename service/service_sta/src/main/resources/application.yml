@@ -1,0 +1,35 @@
+# 服务端口
+server:
+  port: 6003
+
+spring:
+  # 环境设置
+  profiles:
+    active: dev
+  # 服务名
+  application:
+    name: service-sta
+  # 数据库配置
+  datasource:
+    url: jdbc:mysql://192.168.166.128:3306/cloud_blog?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+  # json的全局时间格式
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  # 配置springCloud
+  cloud:
+    # 配置nacos注册中心
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+# mybatis配置
+mybatis-plus:
+  configuration:
+    # 开启mybatis日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #配置mapper.xml文件的路径
+  mapper-locations: classpath:com/mark/sta/mapper/xml/*.xml

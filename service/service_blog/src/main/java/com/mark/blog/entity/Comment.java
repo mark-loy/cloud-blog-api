@@ -40,10 +40,16 @@ public class Comment implements Serializable {
     @ApiModelProperty(value = "评论人id")
     private String visitorId;
 
+    @ApiModelProperty(value = "评论人昵称")
+    private String visitorName;
+
+    @ApiModelProperty(value = "评论人头像")
+    private String visitorAvatar;
+
     @ApiModelProperty(value = "评论内容")
     private String comment;
 
-    @ApiModelProperty(value = "评论状态；0.表示未禁止，1.表示已禁止")
+    @ApiModelProperty(value = "评论状态；0.表示已禁止，1.表示未禁止")
     private Boolean status;
 
     @ApiModelProperty(value = "逻辑删除;0.表示未删除，1.表示已删除")

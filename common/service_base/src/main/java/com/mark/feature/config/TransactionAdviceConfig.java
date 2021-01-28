@@ -1,4 +1,4 @@
-package com.mark.base.config;
+package com.mark.feature.config;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.Advisor;

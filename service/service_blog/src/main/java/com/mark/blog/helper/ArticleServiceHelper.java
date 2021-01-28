@@ -6,6 +6,7 @@ import com.mark.blog.entity.vo.ArticleResponseVO;
 import com.mark.blog.service.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -65,8 +66,10 @@ public class ArticleServiceHelper {
             List<String> tagsName = tags.stream().map(Tag::getName).collect(Collectors.toList());
             // 设置标签名称集合
             articleResponse.setTagsName(tagsName);
+            articleResponse.setTagIds(tagsId);
         } else {
             articleResponse.setTagsName(new ArrayList<>());
+            articleResponse.setTagIds(new ArrayList<>());
         }
 
         // 根据用户id获取用户对象
@@ -76,9 +79,11 @@ public class ArticleServiceHelper {
 
         // 获取文章内容
         ArticleContent articleContent = articleContentService.getById(article.getId());
-        // 设置文章内容
-        articleResponse.setContent(articleContent.getContent());
+        if (articleContent != null) {
+            // 设置文章内容
+            articleResponse.setContent(articleContent.getContent());
 
+        }
         return articleResponse;
     }
 }

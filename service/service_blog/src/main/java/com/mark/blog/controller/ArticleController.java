@@ -2,9 +2,8 @@ package com.mark.blog.controller;
 
 
 import com.mark.base.valid.Group;
-import com.mark.blog.entity.Article;
-import com.mark.blog.entity.vo.ArticleQueryVO;
 import com.mark.blog.entity.vo.ArticleFormVO;
+import com.mark.blog.entity.vo.ArticleQueryVO;
 import com.mark.blog.entity.vo.ArticleResponseVO;
 import com.mark.blog.service.ArticleService;
 import com.mark.common.entity.Result;
@@ -69,6 +68,18 @@ public class ArticleController {
     }
 
     /**
+     * 保存并发布文章数据
+     * @param articleFormVO 文章表单对象
+     * @return Result
+     */
+    @ApiOperation("保存并发布文章数据")
+    @PostMapping("/pub")
+    public Result saveArticlePublish(@ApiParam("文章表单对象") @Validated({Group.Add.class}) @RequestBody ArticleFormVO articleFormVO) {
+        articleService.saveArticlePublish(articleFormVO);
+        return Result.ok();
+    }
+
+    /**
      * 根据文章id查询文章信息
      * @param articleId 文章id
      * @return Result
@@ -93,6 +104,18 @@ public class ArticleController {
     }
 
     /**
+     * 修改并发布文章信息
+     * @param articleFormVO 文章表单对象
+     * @return Result
+     */
+    @ApiOperation("修改文章信息")
+    @PutMapping("/pub")
+    public Result updateArticlePublish(@ApiParam("文章表单对象") @Validated({Group.Update.class}) @RequestBody ArticleFormVO articleFormVO) {
+        articleService.updateArticlePublish(articleFormVO);
+        return Result.ok();
+    }
+
+    /**
      * 根据id删除文章
      * @param articleId 文章id
      * @return Result
@@ -111,8 +134,22 @@ public class ArticleController {
      */
     @ApiOperation("批量删除文章")
     @DeleteMapping("/")
-    public Result deleteBatchArticle(@ApiParam("文章id集合") @RequestParam("aidList") List<String> articlesId) {
+    public Result deleteBatchArticle(@ApiParam("文章id集合") @RequestParam("aids") List<String> articlesId) {
         articleService.deleteBatchArticle(articlesId);
+        return Result.ok();
+    }
+
+    /**
+     * 修改文章的发布状态
+     * @param articleId 文章id
+     * @param isReleased 是否发布
+     * @return Result
+     */
+    @ApiOperation("修改文章的发布状态")
+    @PutMapping("/{aid}/{status}")
+    public Result updateArticleStatus(@ApiParam("文章id") @PathVariable("aid") String articleId,
+                                      @ApiParam("是否发布") @PathVariable("status") Boolean isReleased) {
+        articleService.updateArticleStatus(articleId, isReleased);
         return Result.ok();
     }
 }

@@ -1,9 +1,8 @@
 package com.mark.blog.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,47 +12,50 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * ?û??
+ * 用户表
  * </p>
  *
  * @author mark
- * @since 2021-01-22
+ * @since 2021-01-23
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("blog_user")
-@ApiModel(value="User对象", description="?û??")
+@ApiModel(value="User对象", description="用户表")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "?û?id")
+    @ApiModelProperty(value = "用户id")
     @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
-    @ApiModelProperty(value = "?û???")
+    @ApiModelProperty(value = "用户名")
     private String username;
 
-    @ApiModelProperty(value = "???")
+    @ApiModelProperty(value = "密码")
     private String password;
 
-    @ApiModelProperty(value = "?ǳ")
+    @ApiModelProperty(value = "昵称")
     private String nickname;
 
-    @ApiModelProperty(value = "?û?ͷ?")
+    @ApiModelProperty(value = "用户头像")
     private String avatar;
 
-    @ApiModelProperty(value = "?û?ǩ??")
+    @ApiModelProperty(value = "用户签名")
     private String sign;
 
-    @ApiModelProperty(value = "?߼?ɾ?? 1??true????ɾ???? 0??false??δɾ??")
+    @ApiModelProperty(value = "逻辑删除 1（true）已删除， 0（false）未删除")
+    @TableLogic
     private Boolean isDeleted;
 
-    @ApiModelProperty(value = "????ʱ?")
+    @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
     private Date gmtCreate;
 
-    @ApiModelProperty(value = "????ʱ?")
+    @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date gmtModified;
 
 
