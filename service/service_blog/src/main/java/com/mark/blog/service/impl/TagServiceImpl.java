@@ -2,12 +2,17 @@ package com.mark.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mark.blog.entity.ArticleTag;
 import com.mark.blog.entity.Tag;
 import com.mark.blog.mapper.TagMapper;
+import com.mark.blog.service.ArticleTagService;
 import com.mark.blog.service.TagService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -19,6 +24,9 @@ import org.springframework.util.StringUtils;
  */
 @Service
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagService {
+
+    @Resource
+    private ArticleTagService articleTagService;
 
     /**
      * 条件查询及分页
@@ -35,5 +43,33 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         }
         // 执行分页查询
         baseMapper.selectPage(tagPage, tagWrapper);
+    }
+
+    /**
+     * 删除标签及中间表数据
+     * @param tagId 标签id
+     */
+    @Override
+    public void deleteTag(String tagId) {
+        // 先删除中间表数据
+        QueryWrapper<ArticleTag> articleTagWrapper = new QueryWrapper<>();
+        // 设置标签id
+        articleTagWrapper.eq("tag_id", tagId);
+        // 执行删除
+        articleTagService.remove(articleTagWrapper);
+        // 再删除标签
+        baseMapper.deleteById(tagId);
+    }
+
+    /**
+     * 批量删除标签
+     * @param tidList 标签id集合
+     */
+    @Override
+    public void deleteTagBatch(List<String> tidList) {
+        // 遍历
+        for (String tagId : tidList) {
+            deleteTag(tagId);
+        }
     }
 }

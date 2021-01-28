@@ -50,8 +50,13 @@ public class ArticleServiceHelper {
 
         // 根据分类id查询分类对象
         Category category = categoryService.getById(article.getCategoryId());
-        // 设置分类名称
-        articleResponse.setCategoryName(category.getName());
+        if (category == null) {
+            // 不存在该分类，则将分类id置空
+            articleResponse.setCategoryId("");
+        } else {
+            // 设置分类名称
+            articleResponse.setCategoryName(category.getName());
+        }
 
         // 在文章标签中间表中，根据文章id查询标签id
         QueryWrapper<ArticleTag> articleTagWrapper = new QueryWrapper<>();
@@ -74,8 +79,13 @@ public class ArticleServiceHelper {
 
         // 根据用户id获取用户对象
         User user = userService.getById(article.getUserId());
-        // 设置用户名称
-        articleResponse.setUserName(user.getNickname());
+        if (user == null) {
+            // 不存在该用户，则将用户id置空
+            articleResponse.setUserId("");
+        } else {
+            // 设置用户名称
+            articleResponse.setUserName(user.getNickname());
+        }
 
         // 获取文章内容
         ArticleContent articleContent = articleContentService.getById(article.getId());

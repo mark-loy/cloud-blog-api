@@ -4,10 +4,12 @@ package com.mark.blog.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mark.base.valid.Group;
+import com.mark.blog.entity.ArticleTag;
 import com.mark.blog.entity.Category;
 import com.mark.blog.entity.Tag;
 import com.mark.blog.entity.vo.CategoryFormVO;
 import com.mark.blog.entity.vo.TagFormVO;
+import com.mark.blog.service.ArticleTagService;
 import com.mark.blog.service.TagService;
 import com.mark.common.entity.Result;
 import io.swagger.annotations.Api;
@@ -132,7 +134,7 @@ public class TagController {
     @ApiOperation("根据id删除分类")
     @DeleteMapping("/{tid}")
     public Result deleteTag(@ApiParam("标签id") @PathVariable("tid") String tagId) {
-        tagService.removeById(tagId);
+        tagService.deleteTag(tagId);
         return Result.ok();
     }
 
@@ -144,7 +146,7 @@ public class TagController {
     @ApiOperation("批量删除标签")
     @DeleteMapping("/batch")
     public Result deleteBatchTag(@ApiParam("标签id集合") @RequestParam("tidList") List<String> tidList) {
-        tagService.removeByIds(tidList);
+        tagService.deleteTagBatch(tidList);
         return Result.ok();
     }
 
