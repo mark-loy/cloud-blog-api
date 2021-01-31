@@ -1,4 +1,4 @@
-package com.mark.ucenter.entity;
+package com.mark.site.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
@@ -12,42 +12,39 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 访客表
+ * 站点信息表
  * </p>
  *
  * @author mark
- * @since 2021-01-21
+ * @since 2021-01-30
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("ucenter_visitor")
-@ApiModel(value="Visitor对象", description="访客表")
-public class Visitor implements Serializable {
+@TableName("site_info")
+@ApiModel(value="SiteInfo对象", description="站点信息表")
+public class SiteInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "访客id")
+    @ApiModelProperty(value = "站点id")
     @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
-    @ApiModelProperty(value = "账户id，第三方登录的id")
-    private String accountId;
+    @ApiModelProperty(value = "站点名称")
+    private String name;
 
-    @ApiModelProperty(value = "邮箱地址")
-    private String email;
+    @ApiModelProperty(value = "站点背景图")
+    private String banner;
 
-    @ApiModelProperty(value = "密码，使用MD5加密")
-    private String password;
+    @ApiModelProperty(value = "域名")
+    private String domain;
 
-    @ApiModelProperty(value = "昵称")
-    private String nickname;
+    @ApiModelProperty(value = "标语")
+    private String slogan;
 
-    @ApiModelProperty(value = "用户头像")
-    private String avatar;
-
-    @ApiModelProperty(value = "访客状态；0.表示未禁止，1.表示已禁止")
-    private Boolean isDisabled;
+    @ApiModelProperty(value = "通知")
+    private String notice;
 
     @ApiModelProperty(value = "逻辑删除;0.表示未删除，1.表示已删除")
     @TableLogic

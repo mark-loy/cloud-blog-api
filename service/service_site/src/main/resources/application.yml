@@ -1,6 +1,6 @@
 # 服务端口
 server:
-  port: 6001
+  port: 6005
 
 spring:
   # 环境设置
@@ -8,7 +8,7 @@ spring:
     active: dev
   # 服务名
   application:
-    name: service-blog
+    name: service-site
   # 数据库配置
   datasource:
     url: jdbc:mysql://192.168.166.128:3306/cloud_blog?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8
@@ -32,10 +32,4 @@ mybatis-plus:
     # 开启mybatis日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   #配置mapper.xml文件的路径
-  mapper-locations: classpath:com/mark/blog/mapper/xml/*.xml
-
-# blog服务自定义配置
-blog:
-  article:
-    # 热度文章条件值
-    hotConditionVal: 100
+  mapper-locations: classpath:com/mark/site/mapper/xml/*.xml

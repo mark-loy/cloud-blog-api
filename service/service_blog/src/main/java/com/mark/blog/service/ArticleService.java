@@ -1,13 +1,13 @@
 package com.mark.blog.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mark.blog.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mark.blog.entity.vo.ArticleQueryVO;
 import com.mark.blog.entity.vo.ArticleFormVO;
 import com.mark.blog.entity.vo.ArticleResponseVO;
+import com.mark.blog.entity.vo.front.ArticleFrontQueryVO;
+import com.mark.blog.entity.vo.front.FocusMapVO;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -87,5 +87,27 @@ public interface ArticleService extends IService<Article> {
      * @param articleFormVO 文章表单对象
      */
     void updateArticlePublish(ArticleFormVO articleFormVO);
+
+    /**
+     * 首页查询文章列表
+     * @param page 当前页
+     * @param size 当页显示数
+     * @param articleFrontQueryVO 前台文章查询对象
+     * @return Map<String, Object>
+     */
+    Map<String, Object> getFrontArticles(Long page, Long size, ArticleFrontQueryVO articleFrontQueryVO);
+
+    /**
+     * 修改文章置顶状态
+     * @param articleId 文章id
+     * @param isTop 是否置顶
+     */
+    void updateArticleTopStatus(String articleId, Boolean isTop);
+
+    /**
+     * 获取焦点图数据
+     * @return List<FocusMapVO>
+     */
+    List<FocusMapVO> getFocusMap();
 
 }

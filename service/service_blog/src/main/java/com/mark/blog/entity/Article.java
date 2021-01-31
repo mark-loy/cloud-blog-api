@@ -34,6 +34,9 @@ public class Article implements Serializable {
     @ApiModelProperty(value = "文章标题")
     private String title;
 
+    @ApiModelProperty(value = "文章概要")
+    private String summary;
+
     @ApiModelProperty(value = "发表人id")
     private String userId;
 
@@ -60,6 +63,9 @@ public class Article implements Serializable {
 
     @ApiModelProperty(value = "文章发布状态;0.表示未发布，1.表示已发布")
     private Boolean isReleased;
+
+    @ApiModelProperty(value = "文章置顶状态;0.表示未置顶，1.表示已置顶")
+    private Boolean isTop;
 
     @ApiModelProperty(value = "逻辑删除;0.表示未删除，1.表示已删除")
     @TableLogic

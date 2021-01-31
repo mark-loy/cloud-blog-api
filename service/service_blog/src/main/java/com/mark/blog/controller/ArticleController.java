@@ -152,5 +152,19 @@ public class ArticleController {
         articleService.updateArticleStatus(articleId, isReleased);
         return Result.ok();
     }
+
+    /**
+     * 修改文章的置顶状态
+     * @param articleId 文章id
+     * @param isTop 是否置顶
+     * @return Result
+     */
+    @ApiOperation("修改文章的发布状态")
+    @PutMapping("/top/{aid}/{status}")
+    public Result updateArticleTopStatus(@ApiParam("文章id") @PathVariable("aid") String articleId,
+                                      @ApiParam("是否置顶") @PathVariable("status") Boolean isTop) {
+        articleService.updateArticleTopStatus(articleId, isTop);
+        return Result.ok();
+    }
 }
 

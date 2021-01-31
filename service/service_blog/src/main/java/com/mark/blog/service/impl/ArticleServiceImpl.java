@@ -14,6 +14,9 @@ import com.mark.blog.entity.vo.ArticleFormVO;
 import com.mark.blog.entity.vo.ArticleQueryVO;
 import com.mark.blog.entity.vo.ArticleResponseVO;
 import com.mark.blog.entity.vo.ArticleStaVO;
+import com.mark.blog.entity.vo.front.ArticleFrontQueryVO;
+import com.mark.blog.entity.vo.front.ArticleResultVO;
+import com.mark.blog.entity.vo.front.FocusMapVO;
 import com.mark.blog.helper.ArticleServiceHelper;
 import com.mark.blog.helper.ArticleTagServiceHelper;
 import com.mark.blog.mapper.ArticleMapper;
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -146,6 +150,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 保存并发布文章数据
+     *
      * @param articleFormVO 文章表单对象
      */
     @Override
@@ -160,11 +165,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 设置文章为发布状态
         article.setIsReleased(true);
         // 执行修改
-        baseMapper.updateById(article);;
+        baseMapper.updateById(article);
+        ;
     }
 
     /**
      * 根据文章id查询文章数据，并返回包装结果
+     *
      * @param articleId 文章id
      * @return ArticleResponseVO
      */
@@ -178,6 +185,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 修改文章数据及关联数据
+     *
      * @param articleFormVO 文章表单对象
      */
     @Override
@@ -211,6 +219,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 修改并发布文章
+     *
      * @param articleFormVO 文章表单对象
      */
     @Override
@@ -229,6 +238,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 删除文章数据及关联数据
+     *
      * @param articleId 文章id
      */
     @Override
@@ -247,6 +257,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 批量删除文章数据及关联数据
+     *
      * @param articlesId 文章id集合
      */
     @Override
@@ -258,6 +269,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 生成统计数据
+     *
      * @param date 日期
      * @return Map<String, Object>
      */
@@ -284,9 +296,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             yesterdayCount.setLikeCount(0);
         }
         // 拿当天的减去前一天的浏览数、评论数、点赞数
-        Integer viewCount =  currentCount.getViewCount() - yesterdayCount.getViewCount();
-        Integer commentCount =  currentCount.getCommentCount() - yesterdayCount.getCommentCount();
-        Integer likeCount =  currentCount.getLikeCount() - yesterdayCount.getLikeCount();
+        Integer viewCount = currentCount.getViewCount() - yesterdayCount.getViewCount();
+        Integer commentCount = currentCount.getCommentCount() - yesterdayCount.getCommentCount();
+        Integer likeCount = currentCount.getLikeCount() - yesterdayCount.getLikeCount();
 
         Map<String, Object> map = new HashMap<>(3);
         map.put("viewNum", viewCount);
@@ -298,7 +310,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 修改文章的发布状态
-     * @param articleId 文章id
+     *
+     * @param articleId  文章id
      * @param isReleased 是否发布
      */
     @Override
@@ -312,5 +325,101 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         article.setIsReleased(isReleased);
         // 执行修改
         baseMapper.updateById(article);
+    }
+
+    /**
+     * 首页查询文章数据列表
+     *
+     * @param page                当前页
+     * @param size                当页显示数
+     * @param articleFrontQueryVO 前台文章查询对象
+     * @return Map<String, Object>
+     */
+    @Override
+    public Map<String, Object> getFrontArticles(Long page, Long size, ArticleFrontQueryVO articleFrontQueryVO) {
+        // 构建分页对象
+        Page<Article> articlePage = new Page<>(page, size);
+        // 构建查询对象
+        QueryWrapper<Article> articleWrapper = new QueryWrapper<>();
+        // 排序规则：文章先进行置顶排序，再进行时间发布排序
+        articleWrapper.orderByDesc("is_top", "view_count", "gmt_create");
+        // 设置文章为发布状态
+        articleWrapper.eq("is_released", 1);
+
+        if (!StringUtils.isEmpty(articleFrontQueryVO.getTitle())) {
+            articleWrapper.like("title", articleFrontQueryVO.getTitle());
+        }
+        if (!StringUtils.isEmpty(articleFrontQueryVO.getCateId())) {
+            articleWrapper.eq("category_id", articleFrontQueryVO.getCateId());
+        }
+        if (!StringUtils.isEmpty(articleFrontQueryVO.getTagId())) {
+            // 查询中间表
+            QueryWrapper<ArticleTag> articleTagWrapper = new QueryWrapper<>();
+            articleTagWrapper.eq("tag_id", articleFrontQueryVO.getTagId());
+            List<ArticleTag> tagList = articleTagService.list(articleTagWrapper);
+            List<String> articleId = tagList.stream().map(ArticleTag::getArticleId).collect(Collectors.toList());
+
+            articleWrapper.in("id", articleId);
+        }
+
+        // 执行分页
+        baseMapper.selectPage(articlePage, articleWrapper);
+
+        // 获取分页结果
+        List<Article> articles = articlePage.getRecords();
+        long current = articlePage.getCurrent();
+        boolean hasNext = articlePage.hasNext();
+
+        // 将文章实体转为文章返回数据
+        List<ArticleResultVO> articleList = articleServiceHelper.getArticlesResult(articles);
+
+        // 封装返回结果
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("current", current);
+        map.put("articles", articleList);
+        map.put("hasNext", hasNext);
+        return map;
+    }
+
+    /**
+     * 修改文章置顶状态
+     *
+     * @param articleId 文章id
+     * @param isTop     是否置顶
+     */
+    @Override
+    public void updateArticleTopStatus(String articleId, Boolean isTop) {
+        // 查询文章数据
+        Article article = baseMapper.selectById(articleId);
+        if (article == null) {
+            throw new CustomException(CustomExceptionEnum.NO_ARTICLE);
+        }
+        // 设置文章的发布状态
+        article.setIsTop(isTop);
+        // 执行修改
+        baseMapper.updateById(article);
+    }
+
+    /**
+     * 获取文章焦点图数据
+     *
+     * @return List<FocusMapVO>
+     */
+    @Override
+    public List<FocusMapVO> getFocusMap() {
+        // 构建条件查询对象
+        QueryWrapper<Article> articleWrapper = new QueryWrapper<>();
+        articleWrapper.orderByDesc("is_top", "view_count", "gmt_create");
+        // 查询前三条焦点图数据
+        articleWrapper.last("limit 3");
+        articleWrapper.select("id", "image_title", "image_url");
+        List<Article> articles = baseMapper.selectList(articleWrapper);
+
+        // 构建返回集合
+        return articles.stream().map(article -> {
+            FocusMapVO focusMapVO = new FocusMapVO();
+            focusMapVO.setId(article.getId()).setImageTitle(article.getImageTitle()).setImageUrl(article.getImageUrl());
+            return focusMapVO;
+        }).collect(Collectors.toList());
     }
 }

@@ -3,7 +3,9 @@ package com.mark.blog.helper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mark.blog.entity.*;
 import com.mark.blog.entity.vo.ArticleResponseVO;
+import com.mark.blog.entity.vo.front.ArticleResultVO;
 import com.mark.blog.service.*;
+import com.mark.blog.util.BlogConstantUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -95,5 +97,47 @@ public class ArticleServiceHelper {
 
         }
         return articleResponse;
+    }
+
+    /**
+     * 获取文章返回集合
+     * @param articles 文章实体集合
+     * @return List<ArticleResultVO>
+     */
+    public List<ArticleResultVO> getArticlesResult(List<Article> articles) {
+        List<ArticleResultVO> articleList = new ArrayList<>();
+
+        for (Article article : articles) {
+            // 将返回数据加入集合
+            articleList.add(getArticleResult(article));
+        }
+        return articleList;
+    }
+
+    /**
+     * 获取文章返回数据
+     * @param article 文章实体
+     * @return ArticleResultVO
+     */
+    public ArticleResultVO getArticleResult(Article article) {
+        // 构建返回数据
+        ArticleResultVO articleResult = new ArticleResultVO();
+        BeanUtils.copyProperties(article, articleResult);
+
+        // 查询分类
+        Category category = categoryService.getById(article.getCategoryId());
+        if (category != null) {
+            articleResult.setCateId(category.getId()).setCateName(category.getName());
+        }
+
+        // 判断是否为热度文章
+        // 设置为热度文章
+        articleResult.setIsHot(article.getViewCount() >= BlogConstantUtil.HOT_CONDITION_VAL);
+
+        // 查询文章内容
+        ArticleContent content = articleContentService.getById(article.getId());
+        articleResult.setContent(content.getContent());
+
+        return articleResult;
     }
 }

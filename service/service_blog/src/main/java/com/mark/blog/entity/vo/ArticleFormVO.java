@@ -31,6 +31,9 @@ public class ArticleFormVO implements Serializable {
     @NotBlank(message = "文章标题不能为空", groups = {Group.Add.class})
     private String title;
 
+    @ApiModelProperty(value = "文章概要")
+    private String summary;
+
     @ApiModelProperty(value = "发表人id")
     @NotBlank(message = "发表人不能为空", groups = {Group.Add.class})
     private String userId;
