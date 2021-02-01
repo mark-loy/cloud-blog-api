@@ -9,20 +9,38 @@ package com.mark.base.enums;
  */
 public enum CustomExceptionEnum {
     /**
-     * 文章相关异常
+     * 文章相关
      */
     NO_ARTICLE(20001, "文章不存在"),
     NO_ARTICLE_CONTENT(20001, "文章内容不存在"),
 
     /**
-     * 服务调用相关异常
+     * 服务调用相关
      */
     REQUEST_SERVICE_FAIL(20002, "服务调用失败"),
 
     /**
      * OSS服务相关
      */
-    FILE_UPLOAD_ERROR(20003, "文件上传失败");
+    FILE_UPLOAD_ERROR(20003, "文件上传失败"),
+
+    /**
+     * 访客相关
+     */
+    VISITOR_REGISTER_ERROR(20004, "注册参数不完整"),
+    VISITOR_LOGIN_ERROR(20004, "登录参数不完整"),
+    VISITOR_EXIST(20004, "访客已注册"),
+    VISITOR_NO_EXIST(20004, "访客不存在"),
+    PASSWORD_ERROR(20004, "密码错误"),
+    VISITOR_BAN(20004, "该账户已禁用"),
+
+    /**
+     * redis相关
+     */
+    CODE_NOT_EXIST(20005, "验证码不存在"),
+    CODE_NO_CORRECT(20005, "验证码不正确"),
+
+    ;
 
 
     private final Integer code;

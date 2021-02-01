@@ -37,6 +37,14 @@ spring:
         max-wait: -1
         max-idle: 5
         min-idle: 0
+  # 邮件配置
+  mail:
+    host: smtp.163.com
+    username: muaker@163.com
+    password: KBYCVXXLRZGMZNJS
+    port: 25
+    protocol: smtp
+    default-encoding: utf-8
 
 # mybatis配置
 mybatis-plus:

@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>service_blog</module>
-        <module>service_cms</module>
         <module>service_sta</module>
         <module>service_ucenter</module>
         <module>service_oss</module>

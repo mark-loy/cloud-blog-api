@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 /**
  * @author 木可
@@ -34,7 +35,7 @@ public class VisitorFrontController {
      */
     @ApiOperation("访客注册")
     @PostMapping("/register")
-    public Result visitorRegister(@ApiParam("访客注册表单") @RequestBody VisitorRegisterVO visitorRegisterVO) {
+    public Result visitorRegister(@ApiParam("访客注册表单") @Valid @RequestBody VisitorRegisterVO visitorRegisterVO) {
         if (visitorRegisterVO == null) {
             return Result.error().message("注册信息为空");
         }
@@ -49,9 +50,12 @@ public class VisitorFrontController {
      */
     @ApiOperation(("访客登录"))
     @PostMapping("/login")
-    public Result visitorLogin(@ApiParam("访客登录表单") @RequestBody VisitorLoginVO visitorLoginVO) {
-
-        return Result.ok();
+    public Result visitorLogin(@ApiParam("访客登录表单") @Valid @RequestBody VisitorLoginVO visitorLoginVO) {
+        if (visitorLoginVO == null) {
+            return Result.error().message("登录信息为空");
+        }
+        String token = visitorService.toLogin(visitorLoginVO);
+        return Result.ok().data("token", token);
     }
 
 

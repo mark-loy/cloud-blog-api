@@ -1,4 +1,4 @@
-package com.mark.cms.config;
+package com.mark.ucenter.config;
 
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2020/12/18 20:59
  */
 @Configuration
-@MapperScan("com.mark.cms.mapper")
+@MapperScan("com.mark.ucenter.mapper")
 public class MybatisPlusConfig {
 
     /**

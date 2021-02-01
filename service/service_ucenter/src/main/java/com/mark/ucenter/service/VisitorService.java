@@ -2,6 +2,7 @@ package com.mark.ucenter.service;
 
 import com.mark.ucenter.entity.Visitor;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mark.ucenter.entity.vo.VisitorLoginVO;
 import com.mark.ucenter.entity.vo.VisitorQueryVO;
 import com.mark.ucenter.entity.vo.VisitorRegisterVO;
 
@@ -31,4 +32,11 @@ public interface VisitorService extends IService<Visitor> {
      * @param visitorRegisterVO 访客注册表单
      */
     void toRegister(VisitorRegisterVO visitorRegisterVO);
+
+    /**
+     * 访客登录
+     * @param visitorLoginVO 访客登录表单
+     * @return String
+     */
+    String toLogin(VisitorLoginVO visitorLoginVO);
 }
