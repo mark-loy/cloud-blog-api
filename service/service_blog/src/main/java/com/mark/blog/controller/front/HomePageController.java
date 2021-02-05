@@ -21,7 +21,7 @@ import java.util.Map;
 @Api(value = "首页管理", tags = {"首页接口管理"})
 @RestController
 @RequestMapping("api/blog/home")
-public class HomeController {
+public class HomePageController {
 
     @Resource
     private ArticleService articleService;

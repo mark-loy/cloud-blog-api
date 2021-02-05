@@ -33,32 +33,22 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     /**
      * 分页查询评论数据
      *
-     * @param current   当前页
-     * @param limit     当页显示数
      * @param articleId 文章id
      * @return Map<String, Object>
      */
     @Override
-    public Map<String, Object> getCommentPage(Long current, Long limit, String articleId) {
-        // 构建分页对象
-        Page<Comment> commentPage = new Page<>(current, limit);
+    public Map<String, Object> getCommentPage(String articleId) {
         // 构建条件查询对象
         QueryWrapper<Comment> commentWrapper = new QueryWrapper<>();
         // 设置文章id
         commentWrapper.eq("article_id", articleId);
-        // 设置评论状态 0：表示未禁用
-        commentWrapper.eq("status", 1);
         // 执行分页
-        baseMapper.selectPage(commentPage, commentWrapper);
-        // 获取分页数据
-        List<Comment> comments = commentPage.getRecords();
-        long total = commentPage.getTotal();
+        List<Comment> comments = baseMapper.selectList(commentWrapper);
         // 封装评论数据
         List<CommentResponseVO> commentResponse = commentServiceHelper.getCommentResponse(comments, "0");
 
         HashMap<String, Object> resultMap = new HashMap<>(2);
         resultMap.put("comments", commentResponse);
-        resultMap.put("total", total);
         return resultMap;
     }
 
@@ -80,14 +70,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             // 获取所有的二级评论
             List<Comment> commentsChildTemp = baseMapper.selectList(commentWrapper);
             // 修改所有二级评论状态
-            List<Comment> commentsChild = commentsChildTemp.stream().map(commentChild -> commentChild.setStatus(status)).collect(Collectors.toList());
+            List<Comment> commentsChild = commentsChildTemp.stream().map(commentChild -> commentChild.setIsDisabled(status)).collect(Collectors.toList());
 
             // 执行修改
             this.updateBatchById(commentsChild);
         }
 
         // 该评论不是一级评论，则直接修改状态
-        comment.setStatus(status);
+        comment.setIsDisabled(status);
         baseMapper.updateById(comment);
     }
 

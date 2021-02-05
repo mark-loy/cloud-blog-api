@@ -23,18 +23,53 @@ import java.util.Map;
 
 /**
  * http请求工具类
+ *
  * @author 木可
  */
 public class HttpClientUtil {
 
+
     /**
-     * 发送get请求
+     * 发送get请求，不带参数
+     *
+     * @param url 请求地址
+     * @return String
+     */
+    public static String doGet(String url) {
+        return doGetParams(url, null);
+    }
+
+    /**
+     * 发送get请求,并携带参数
      *
      * @param url   请求地址
      * @param param 参数
      * @return String
      */
-    public static String doGet(String url, Map<String, String> param) {
+    public static String doGetParams(String url, Map<String, String> param) {
+        return doGetParamsHeaders(url, param, null);
+    }
+
+    /**
+     * 发送get请求,并携带请求头
+     *
+     * @param url   请求地址
+     * @param headers 请求头
+     * @return String
+     */
+    public static String doGetHeaders(String url, Map<String, String> headers) {
+        return doGetParamsHeaders(url, null, headers);
+    }
+
+    /**
+     * 发送get请求，并携带参数，请求头
+     *
+     * @param url     请求地址
+     * @param param   请求参数
+     * @param headers 请求头
+     * @return String
+     */
+    public static String doGetParamsHeaders(String url, Map<String, String> param, Map<String, String> headers) {
 
         // 创建Httpclient对象
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -54,6 +89,13 @@ public class HttpClientUtil {
             // 创建http GET请求
             HttpGet httpGet = new HttpGet(uri);
 
+            // 请求头非空
+            if (headers != null) {
+                // 遍历
+                for (Map.Entry<String, String> header : headers.entrySet()) {
+                    httpGet.setHeader(header.getKey(), header.getValue());
+                }
+            }
             // 执行请求
             response = httpclient.execute(httpGet);
             // 判断返回状态是否为200
@@ -77,13 +119,13 @@ public class HttpClientUtil {
     }
 
     /**
-     * 发送get请求，不带参数
+     * 发送POST请求，不带参数
      *
      * @param url 请求地址
      * @return String
      */
-    public static String doGet(String url) {
-        return doGet(url, null);
+    public static String doPost(String url) {
+        return doPostJson(url, null);
     }
 
     /**
@@ -94,7 +136,92 @@ public class HttpClientUtil {
      * @param param Map格式的参数
      * @return String
      */
-    public static String doPost(String url, Map<String, String> param) {
+    public static String doPostMap(String url, Map<String, String> param) {
+        return doPostBodyMapHeader(url, param, null);
+    }
+
+    /**
+     * 发送post请求，携带json类型数据
+     * 如：{"name":"jok","age":"10"}
+     *
+     * @param url  请求地址
+     * @param json json格式参数
+     * @return String
+     */
+    public static String doPostJson(String url, String json) {
+        return doPostBodyJsonHeader(url, json, null);
+    }
+
+    /**
+     * 发送post请求，携带请求头
+     *
+     * @param url     请求地址
+     * @param headers 请求头
+     * @return String
+     */
+    public static String doPostHeader(String url, Map<String, String> headers) {
+        return doPostBodyMapHeader(url, null, headers);
+    }
+
+    /**
+     * 发送post请求，携带json类型数据
+     * 如：{"name":"jok","age":"10"}
+     *
+     * @param url  请求地址
+     * @param json json格式参数
+     * @param headers 请求头
+     * @return String
+     */
+    public static String doPostBodyJsonHeader(String url, String json, Map<String, String> headers) {
+        // 创建Httpclient对象
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        CloseableHttpResponse response = null;
+        String resultString;
+        try {
+            // 创建Http Post请求
+            HttpPost httpPost = new HttpPost(url);
+            // 判断请求头是否为空
+            if (headers != null) {
+                // 遍历map
+                for (Map.Entry<String, String> header : headers.entrySet()) {
+                    httpPost.setHeader(header.getKey(), header.getValue());
+                }
+            }
+            // 判断json非空
+            if (json != null) {
+                // 创建请求内容
+                StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);
+                httpPost.setEntity(entity);
+            }
+
+            // 执行http请求
+            response = httpClient.execute(httpPost);
+            resultString = EntityUtils.toString(response.getEntity(), getDefaultCharSet());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("POST请求异常：" + e);
+        } finally {
+            try {
+                if (response != null) {
+                    response.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return resultString;
+    }
+
+    /**
+     * 发送POST请求，携带map格式的参数
+     * 如：name="jok",age="10"
+     *
+     * @param url   请求地址
+     * @param param Map格式的参数
+     * @param headers 请求头
+     * @return String
+     */
+    public static String doPostBodyMapHeader(String url, Map<String, String> param, Map<String, String> headers) {
         // 创建Httpclient对象
         CloseableHttpClient httpClient = HttpClients.createDefault();
         CloseableHttpResponse response = null;
@@ -112,6 +239,13 @@ public class HttpClientUtil {
                 UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList, getDefaultCharSet());
                 httpPost.setEntity(entity);
             }
+            // 判断请求头是否为空
+            if (headers != null) {
+                // 遍历map
+                for (Map.Entry<String, String> header : headers.entrySet()) {
+                    httpPost.setHeader(header.getKey(), header.getValue());
+                }
+            }
             // 执行http请求
             response = httpClient.execute(httpPost);
             resultString = EntityUtils.toString(response.getEntity(), getDefaultCharSet());
@@ -131,50 +265,12 @@ public class HttpClientUtil {
     }
 
     /**
-     * 发送POST请求，不带参数
-     *
-     * @param url 请求地址
-     * @return String
+     * 设置HTTP请求头
+     * @param httpPost http
+     * @param headers 请求头
      */
-    public static String doPost(String url) {
-        return doPost(url, null);
-    }
+    private static void setHttpHeaders(HttpPost httpPost, Map<String, String> headers) {
 
-    /**
-     * 发送post请求，携带json类型数据
-     * 如：{"name":"jok","age":"10"}
-     *
-     * @param url  请求地址
-     * @param json json格式参数
-     * @return String
-     */
-    public static String doPostJson(String url, String json) {
-        // 创建Httpclient对象
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        CloseableHttpResponse response = null;
-        String resultString;
-        try {
-            // 创建Http Post请求
-            HttpPost httpPost = new HttpPost(url);
-            // 创建请求内容
-            StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);
-            httpPost.setEntity(entity);
-            // 执行http请求
-            response = httpClient.execute(httpPost);
-            resultString = EntityUtils.toString(response.getEntity(), getDefaultCharSet());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("POST请求异常：" + e);
-        } finally {
-            try {
-                if (response != null) {
-                    response.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return resultString;
     }
 
     /**

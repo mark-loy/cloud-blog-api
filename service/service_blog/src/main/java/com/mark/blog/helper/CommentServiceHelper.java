@@ -2,6 +2,7 @@ package com.mark.blog.helper;
 
 import com.mark.blog.entity.Comment;
 import com.mark.blog.entity.vo.CommentResponseVO;
+import com.mark.blog.entity.vo.front.CommentResultVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class CommentServiceHelper {
 
     /**
-     * 递归遍历评论数据
+     * 后台==》递归遍历评论数据
      * @param comments 当前文章的评论数据
      * @param parentId 评论的父级id
      * @return List<CommentResponseVO>
@@ -40,5 +41,42 @@ public class CommentServiceHelper {
             }
         }
         return commentResponse;
+    }
+
+    /**
+     * 前台==》递归遍历评论数据
+     * @param comments 当前文章的评论数据
+     * @param parentId 评论的父级id
+     * @return List<CommentResultVOVO>
+     */
+    public List<CommentResultVO> getCommentResult(List<Comment> comments, String parentId) {
+        // 最终封装的结果集合
+        List<CommentResultVO> commentResult = new ArrayList<>();
+        // 遍历
+        for (Comment comment : comments) {
+            // 判断评论禁用状态
+            if (comment.getIsDisabled()) {
+                // true：已禁用 ==> 进入下一次循环
+                continue;
+            }
+            // 判断评论类型
+            if (parentId.equals(comment.getParentId())) {
+                // 构建返回的评论对象
+                CommentResultVO commentResultVO = new CommentResultVO();
+                BeanUtils.copyProperties(comment, commentResultVO);
+                // 判断是否为一级评论
+                if ("0".equals(parentId)) {
+                    commentResultVO.setAcceptName("");
+                    commentResultVO.setAcceptId("");
+                }
+
+                // 设置二级评论
+                commentResultVO.setChildren(getCommentResult(comments, comment.getId()));
+
+                // 将返回的评论对象加入集合
+                commentResult.add(commentResultVO);
+            }
+        }
+        return commentResult;
     }
 }

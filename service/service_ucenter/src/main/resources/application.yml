@@ -45,6 +45,7 @@ spring:
     port: 25
     protocol: smtp
     default-encoding: utf-8
+    subject: 小码客个人博客网站
 
 # mybatis配置
 mybatis-plus:
@@ -53,3 +54,18 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   #配置mapper.xml文件的路径
   mapper-locations: classpath:com/mark/ucenter/mapper/xml/*.xml
+
+# 第三方登录配置
+third:
+  login:
+    # GitHub登录配置
+    github:
+      clientId: 59893b9eaeab2f071f91
+      secret: 469abc49468b0038922760f9ea751def5cea2b78
+      redirectUrl: http://192.168.166.128:600/api/ucenter/login/github/callback
+    # Gitee登录配置
+    gitee:
+      clientId: 942924a45398a460db7020fa5524c6b0e956213b55843eff3fe111836c8f27f1
+      secret: 026a320312744ddb8259d576a429a5a6b3e7521c8539807844f12fc04d03cbf8
+      redirectUrlCode: http://192.168.166.128:600/api/ucenter/login/gitee/callback
+      redirectUrlToken: http://192.168.166.128:600/api/ucenter/login/gitee/callback/token

@@ -17,13 +17,11 @@ import java.util.Map;
 public interface CommentService extends IService<Comment> {
 
     /**
-     * 分页查询评论数据
-     * @param current 当前页
-     * @param limit 当页显示数
+     * 查询评论数据
      * @param articleId 文章id
      * @return Map<String, Object>
      */
-    Map<String, Object> getCommentPage(Long current, Long limit, String articleId);
+    Map<String, Object> getCommentPage(String articleId);
 
     /**
      * 修改评论状态

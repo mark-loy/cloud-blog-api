@@ -1,5 +1,6 @@
-package com.mark.blog.entity.vo;
+package com.mark.blog.entity.vo.front;
 
+import com.mark.blog.entity.vo.CommentResponseVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,11 +12,11 @@ import java.util.List;
 /**
  * @author 木可
  * @version 1.0
- * @date 2021/1/23 20:55
+ * @date 2021/2/4 21:01
  */
 @Data
-@ApiModel(value = "后台评论结果对象")
-public class CommentResponseVO implements Serializable {
+@ApiModel(value = "前台评论结果对象")
+public class CommentResultVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "评论id")
@@ -39,13 +40,9 @@ public class CommentResponseVO implements Serializable {
     @ApiModelProperty(value = "评论内容")
     private String content;
 
-    @ApiModelProperty(value = "评论状态；0.表示已禁止，1.表示未禁止")
-    private Boolean isDisabled;
-
     @ApiModelProperty(value = "创建时间")
     private Date gmtCreate;
 
     @ApiModelProperty(value = "二级评论集合")
-    private List<CommentResponseVO> children;
-
+    private List<CommentResultVO> children;
 }

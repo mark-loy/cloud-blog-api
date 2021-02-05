@@ -108,7 +108,7 @@ public class ArticleController {
      * @param articleFormVO 文章表单对象
      * @return Result
      */
-    @ApiOperation("修改文章信息")
+    @ApiOperation("修改并发布文章信息")
     @PutMapping("/pub")
     public Result updateArticlePublish(@ApiParam("文章表单对象") @Validated({Group.Update.class}) @RequestBody ArticleFormVO articleFormVO) {
         articleService.updateArticlePublish(articleFormVO);

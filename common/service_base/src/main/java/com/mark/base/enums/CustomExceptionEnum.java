@@ -39,7 +39,7 @@ public enum CustomExceptionEnum {
      */
     CODE_NOT_EXIST(20005, "验证码不存在"),
     CODE_NO_CORRECT(20005, "验证码不正确"),
-
+    STATE_NO_MATCH(20005, "状态码不匹配")
     ;
 
 

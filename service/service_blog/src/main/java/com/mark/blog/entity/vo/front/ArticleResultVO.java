@@ -22,6 +22,9 @@ public class ArticleResultVO implements Serializable {
     @ApiModelProperty("文章id")
     private String id;
 
+    @ApiModelProperty("发表人id")
+    private String userId;
+
     @ApiModelProperty("文章标题")
     private String title;
 
@@ -54,9 +57,6 @@ public class ArticleResultVO implements Serializable {
 
     @ApiModelProperty(value = "阅读数")
     private Integer viewCount;
-
-    @ApiModelProperty(value = "点赞数")
-    private Integer likeCount;
 
     @ApiModelProperty(value = "评论数")
     private Integer commentCount;

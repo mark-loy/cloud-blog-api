@@ -46,11 +46,17 @@ public class Comment implements Serializable {
     @ApiModelProperty(value = "评论人头像")
     private String visitorAvatar;
 
-    @ApiModelProperty(value = "评论内容")
-    private String comment;
+    @ApiModelProperty(value = "接收人id")
+    private String acceptId;
 
-    @ApiModelProperty(value = "评论状态；0.表示已禁止，1.表示未禁止")
-    private Boolean status;
+    @ApiModelProperty(value = "接收人昵称")
+    private String acceptName;
+
+    @ApiModelProperty(value = "评论内容")
+    private String content;
+
+    @ApiModelProperty(value = "评论状态；0.表示未禁用，1.表示已禁用")
+    private Boolean isDisabled;
 
     @ApiModelProperty(value = "逻辑删除;0.表示未删除，1.表示已删除")
     @TableLogic

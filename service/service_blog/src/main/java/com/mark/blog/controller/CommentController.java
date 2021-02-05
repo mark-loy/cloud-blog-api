@@ -31,24 +31,16 @@ public class CommentController {
     private CommentService commentService;
 
     /**
-     * 获取评论分页信息
-     * @param current 当前页
-     * @param limit 当页显示数
+     * 获取评论信息
      * @param articleId 文章id
      * @return Result
 
      */
     @ApiOperation("获取评论分页信息")
-    @GetMapping("/{current}/{limit}")
-    public Result getCommentPage(@ApiParam("当前页") @PathVariable("current") Long current,
-                                 @ApiParam("当页显示数") @PathVariable("limit") Long limit,
-                                 @ApiParam("文章id") @RequestParam("aid") String articleId) {
-        // 判断分页参数
-        if (current < 1 || limit < 1) {
-            return Result.error().message("分页参数不能为负数");
-        }
+    @GetMapping("/{aid}")
+    public Result getCommentPage(@ApiParam("文章id") @PathVariable("aid") String articleId) {
         // 获取评论分页信息
-        Map<String, Object> map = commentService.getCommentPage(current, limit, articleId);
+        Map<String, Object> map = commentService.getCommentPage(articleId);
 
         return Result.ok().data(map);
     }
@@ -56,14 +48,14 @@ public class CommentController {
     /**
      * 修改评论状态
      * @param commentId 评论id
-     * @param status 状态 0：未禁止 1：表示已禁止
+     * @param isDisabled 是否已禁用 false：未禁用 true：已禁用
      * @return Result
      */
     @ApiOperation("修改评论状态")
-    @PutMapping("/{cid}/{status}")
+    @PutMapping("/{cid}/{isDisabled}")
     public Result updateCommentStatus(@ApiParam("评论id") @PathVariable("cid") String commentId,
-                                      @ApiParam(value = "状态", example = "0：已禁止 1：表示正常") @PathVariable("status") Boolean status) {
-        commentService.updateCommentStatus(commentId, status);
+                                      @ApiParam(value = "是否已禁用") @PathVariable("isDisabled") Boolean isDisabled) {
+        commentService.updateCommentStatus(commentId, isDisabled);
         return Result.ok();
     }
 
@@ -88,16 +80,6 @@ public class CommentController {
     @DeleteMapping("/")
     public Result deleteBatchComment(@ApiParam("评论id集合") @RequestParam("commentIds") List<String> commentIds) {
         commentService.deleteBatchComment(commentIds);
-        return Result.ok();
-    }
-
-    /**
-     * TODO 添加评论
-     * @return Result
-     */
-    @PostMapping("/")
-    public Result saveComment() {
-
         return Result.ok();
     }
 

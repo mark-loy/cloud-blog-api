@@ -140,7 +140,7 @@ public class VisitorServiceImpl extends ServiceImpl<VisitorMapper, Visitor> impl
             throw new CustomException(CustomExceptionEnum.VISITOR_BAN);
         }
         // 密码正确，生成token
-        Map<String, Object> tokenMap = new HashMap<>(3);
+        Map<String, Object> tokenMap = new HashMap<>(4);
         tokenMap.put("id", visitor.getId());
         tokenMap.put("nickname", visitor.getNickname());
         tokenMap.put("email", email);

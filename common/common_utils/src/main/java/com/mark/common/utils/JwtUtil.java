@@ -74,7 +74,7 @@ public class JwtUtil {
      */
     public static boolean checkToken(HttpServletRequest request) {
         try {
-            String jwtToken = request.getHeader("token");
+            String jwtToken = request.getHeader("X-Token");
             if(StringUtils.isEmpty(jwtToken)) {
                 return false;
             }
@@ -91,8 +91,8 @@ public class JwtUtil {
      * @param request HttpServletRequest
      * @return Claims
      */
-    public static Claims getMemberIdByJwtToken(HttpServletRequest request) {
-        String jwtToken = request.getHeader("token");
+    public static Claims getUserByJwtToken(HttpServletRequest request) {
+        String jwtToken = request.getHeader("X-Token");
         if(StringUtils.isEmpty(jwtToken)) {
             return null;
         }

@@ -1,19 +1,22 @@
 package com.mark.ucenter.controller.front;
 
 import com.mark.common.entity.Result;
+import com.mark.common.utils.JwtUtil;
 import com.mark.ucenter.entity.vo.VisitorLoginVO;
 import com.mark.ucenter.entity.vo.VisitorRegisterVO;
 import com.mark.ucenter.service.VisitorService;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author 木可
@@ -56,6 +59,36 @@ public class VisitorFrontController {
         }
         String token = visitorService.toLogin(visitorLoginVO);
         return Result.ok().data("token", token);
+    }
+
+    /**
+     * 获取访客信息
+     * @param httpServletRequest request请求
+     * @return Result
+     */
+    @ApiOperation("获取访客信息")
+    @GetMapping("/info")
+    public Result getVisitorInfo(HttpServletRequest httpServletRequest) {
+        // 从请求头中获取token
+        String token = httpServletRequest.getHeader("X-Token");
+        if (StringUtils.isEmpty(token)) {
+            return Result.error().message("token为空");
+        }
+
+        // 解析token
+        Claims claims = JwtUtil.parseToken(token);
+        if (claims == null) {
+            return Result.error().message("token解析错误");
+        }
+        String id = (String) claims.get("id");
+        String nickname = (String) claims.get("nickname");
+        String avatar = (String) claims.get("avatar");
+
+        Map<String, Object> map = new HashMap<>(3);
+        map.put("id", id);
+        map.put("nickname", nickname);
+        map.put("avatar", avatar);
+        return Result.ok().data(map);
     }
 
 
