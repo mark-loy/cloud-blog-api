@@ -30,15 +30,6 @@ public class UCenterConstant implements InitializingBean {
     @Value("${third.login.gitee.redirectUrlCode}")
     private String giteeRedirectUrlCode;
 
-    @Value("${third.login.gitee.redirectUrlToken}")
-    private String giteeRedirectUrlToken;
-
-    @Value("${spring.mail.subject}")
-    private String mailSubject;
-
-    @Value("${spring.mail.username}")
-    private String mailFrom;
-
     public static String GITHUB_CLIENT_ID;
 
     public static String GITHUB_SECRET;
@@ -51,12 +42,6 @@ public class UCenterConstant implements InitializingBean {
 
     public static String GITEE_REDIRECT_URL_CODE;
 
-    public static String GITEE_REDIRECT_URL_TOKEN;
-
-    public static String MAIL_SUBJECT;
-
-    public static String MAIL_FROM;
-
     @Override
     public void afterPropertiesSet() throws Exception {
         GITHUB_CLIENT_ID = githubClientId;
@@ -65,8 +50,5 @@ public class UCenterConstant implements InitializingBean {
         GITEE_CLIENT_ID = giteeClientId;
         GITEE_SECRET = giteeSecret;
         GITEE_REDIRECT_URL_CODE = giteeRedirectUrlCode;
-        GITEE_REDIRECT_URL_TOKEN = giteeRedirectUrlToken;
-        MAIL_SUBJECT = mailSubject;
-        MAIL_FROM = mailFrom;
     }
 }

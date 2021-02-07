@@ -1,4 +1,4 @@
-package com.mark.site.entity;
+package com.mark.mds.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
@@ -12,36 +12,36 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 友站信息表
+ * 邮件管理表
  * </p>
  *
  * @author mark
- * @since 2021-02-05
+ * @since 2021-02-06
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("site_friend")
-@ApiModel(value="Friend对象", description="友站信息表")
-public class Friend implements Serializable {
+@TableName("mds_mail")
+@ApiModel(value="Mail对象", description="邮件管理表")
+public class Mail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "友站id")
+    @ApiModelProperty(value = "邮件id")
     @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
-    @ApiModelProperty(value = "友站名称")
-    private String name;
+    @ApiModelProperty(value = "邮件接收者")
+    private String to;
 
-    @ApiModelProperty(value = "友站链接")
-    private String friendUrl;
+    @ApiModelProperty(value = "邮件发送者")
+    private String from;
 
-    @ApiModelProperty(value = "友站头像")
-    private String imageUrl;
+    @ApiModelProperty(value = "邮件主题")
+    private String subject;
 
-    @ApiModelProperty(value = "友站简介")
-    private String friendSummary;
+    @ApiModelProperty(value = "内容主体")
+    private String text;
 
     @ApiModelProperty(value = "逻辑删除;0.表示未删除，1.表示已删除")
     @TableLogic

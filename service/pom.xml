@@ -17,6 +17,7 @@
         <module>service_ucenter</module>
         <module>service_oss</module>
         <module>service_site</module>
+        <module>service_mds</module>
     </modules>
 
     <dependencies>

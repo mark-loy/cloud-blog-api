@@ -1,10 +1,12 @@
-package com.mark.ucenter.service.impl;
+package com.mark.mds.service.impl;
 
 import com.mark.base.vo.CommentMailRpcVO;
-import com.mark.ucenter.service.MailSendService;
-import com.mark.ucenter.util.GeneratorCode;
-import com.mark.ucenter.util.UCenterConstant;
-import org.springframework.beans.factory.annotation.Value;
+import com.mark.mds.entity.Mail;
+import com.mark.mds.mapper.MailMapper;
+import com.mark.mds.service.MailService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mark.mds.util.GeneratorCode;
+import com.mark.mds.util.MdsConstant;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,13 +16,15 @@ import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author 木可
- * @version 1.0
- * @date 2021/2/5 12:15
+ * <p>
+ * 邮件管理表 服务实现类
+ * </p>
+ *
+ * @author mark
+ * @since 2021-02-06
  */
 @Service
-public class MailSendServiceImpl implements MailSendService {
-
+public class MailServiceImpl extends ServiceImpl<MailMapper, Mail> implements MailService {
     @Resource
     private JavaMailSender mailSender;
 
@@ -83,13 +87,17 @@ public class MailSendServiceImpl implements MailSendService {
         // 邮件接收方
         message.setTo(to);
         // 邮件标题
-        message.setSubject(UCenterConstant.MAIL_SUBJECT);
+        message.setSubject(MdsConstant.MAIL_SUBJECT);
         // 邮件内容主体
         message.setText(text);
         // 邮件发送方
-        message.setFrom(UCenterConstant.MAIL_FROM);
-
+        message.setFrom(MdsConstant.MAIL_FROM);
         // 发送邮件
         mailSender.send(message);
+
+        // 将邮件数据保存到数据库
+        Mail mail = new Mail();
+        mail.setFrom(MdsConstant.MAIL_FROM).setTo(to).setSubject(MdsConstant.MAIL_SUBJECT).setText(text);
+        baseMapper.insert(mail);
     }
 }

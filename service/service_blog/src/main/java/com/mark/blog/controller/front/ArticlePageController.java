@@ -3,6 +3,7 @@ package com.mark.blog.controller.front;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mark.base.vo.CommentMailRpcVO;
 import com.mark.base.vo.VisitorRpcVO;
+import com.mark.blog.client.MailClient;
 import com.mark.blog.client.UCenterClient;
 import com.mark.blog.entity.Article;
 import com.mark.blog.entity.Comment;
@@ -38,7 +39,7 @@ import java.util.List;
 @Api(value = "文章详情页管理", tags = {"文章详情页接口管理"})
 @RestController
 @RequestMapping("api/blog/article/detail")
-public class ArticleDetailPageController {
+public class ArticlePageController {
 
     @Resource
     private ArticleService articleService;
@@ -54,6 +55,9 @@ public class ArticleDetailPageController {
 
     @Resource
     private UCenterClient uCenterClient;
+
+    @Resource
+    private MailClient mailClient;
 
     @Resource
     private UserService userService;
@@ -150,7 +154,7 @@ public class ArticleDetailPageController {
                     .setReplayName(acceptRpcVO.getNickname())
                     .setArticleName(article.getTitle());
             // 远程调用，发送邮件
-            Result result = uCenterClient.sendCommentMail(commentMailVO);
+            Result result = mailClient.sendCommentMail(commentMailVO);
             if (!result.getSuccess()) {
                 return Result.error().message("邮件发送失败");
             }

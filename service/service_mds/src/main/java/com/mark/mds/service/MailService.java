@@ -1,13 +1,19 @@
-package com.mark.ucenter.service;
+package com.mark.mds.service;
 
 import com.mark.base.vo.CommentMailRpcVO;
+import com.mark.mds.entity.Mail;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * @author 木可
- * @version 1.0
- * @date 2021/2/5 12:15
+ * <p>
+ * 邮件管理表 服务类
+ * </p>
+ *
+ * @author mark
+ * @since 2021-02-06
  */
-public interface MailSendService {
+public interface MailService extends IService<Mail> {
+
     /**
      * 发送验证码邮件
      * @param to 邮件接收人
@@ -19,5 +25,4 @@ public interface MailSendService {
      * @param commentMailVO 评论邮件实体
      */
     void sendCommentMail(CommentMailRpcVO commentMailVO);
-
 }

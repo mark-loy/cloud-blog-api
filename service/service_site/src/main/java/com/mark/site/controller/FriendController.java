@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * <p>
@@ -33,6 +34,18 @@ public class FriendController {
     private FriendService friendService;
 
     /**
+     * 查询所有友站信息
+     * @return Result
+     */
+    @ApiOperation("查询所有友站信息")
+    @GetMapping("/")
+    public Result getAllFriend() {
+        List<Friend> friends = friendService.list(null);
+        return Result.ok().data("friends", friends);
+    }
+
+
+    /**
      * 保存友站信息
      * @param friendVO 友站表单
      * @return Result
@@ -44,6 +57,18 @@ public class FriendController {
         BeanUtils.copyProperties(friendVO, friend);
         friendService.save(friend);
         return Result.ok();
+    }
+
+    /**
+     * 根据id查询友站信息
+     * @param friendId 友站id
+     * @return Result
+     */
+    @ApiOperation("根据id查询友站信息")
+    @GetMapping("/{fid}")
+    public Result getFriendById(@ApiParam("友站id") @PathVariable("fid") String friendId) {
+        Friend friend = friendService.getById(friendId);
+        return Result.ok().data("friend", friend);
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.mark.ucenter.util;
+package com.mark.mds.util;
 
 import java.util.Random;
 

@@ -26,7 +26,7 @@ public class CodeGenerator {
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
         System.out.println(projectPath);
-        gc.setOutputDir("D:\\project\\Idea Project\\项目\\cloud_blog\\service\\service_site" + "/src/main/java");
+        gc.setOutputDir("D:\\project\\Idea Project\\项目\\cloud_blog\\service\\service_mds" + "/src/main/java");
         gc.setAuthor("mark");
         gc.setOpen(false); //生成后是否打开资源管理器
         gc.setFileOverride(false); //重新生成时文件是否覆盖
@@ -49,7 +49,7 @@ public class CodeGenerator {
         mpg.setDataSource(dsc);
         // 4、包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName("site"); //模块名
+        pc.setModuleName("mds"); //模块名
         pc.setParent("com.mark");
         pc.setController("controller");
         pc.setEntity("entity");
@@ -58,9 +58,9 @@ public class CodeGenerator {
         mpg.setPackageInfo(pc);
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
-        strategy.setInclude("site_guestbook");
+        strategy.setInclude("mds_mail");
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
-        strategy.setTablePrefix("site" + "_"); //生成实体时去掉表前缀
+        strategy.setTablePrefix("mds" + "_"); //生成实体时去掉表前缀
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);//数据库表字段映射到实体的命名策略
         strategy.setEntityLombokModel(true); // lombok 模型 @Accessors(chain = true) setter链式操作
         strategy.setRestControllerStyle(true); //restful api风格控制器
