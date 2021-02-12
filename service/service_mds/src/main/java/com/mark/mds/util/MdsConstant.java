@@ -4,6 +4,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
+
 /**
  * @author 木可
  * @version 1.0
@@ -18,13 +20,19 @@ public class MdsConstant implements InitializingBean {
     @Value("${spring.mail.username}")
     private String mailFrom;
 
+    @Value("${spring.mail.siteUrl}")
+    private String siteUrl;
+
     public static String MAIL_SUBJECT;
 
     public static String MAIL_FROM;
+
+    public static String SITE_URL;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         MAIL_SUBJECT = mailSubject;
         MAIL_FROM = mailFrom;
+        SITE_URL = siteUrl;
     }
 }

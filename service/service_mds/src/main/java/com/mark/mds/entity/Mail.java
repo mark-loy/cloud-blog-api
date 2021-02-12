@@ -32,10 +32,10 @@ public class Mail implements Serializable {
     private String id;
 
     @ApiModelProperty(value = "邮件接收者")
-    private String to;
+    private String toMail;
 
     @ApiModelProperty(value = "邮件发送者")
-    private String from;
+    private String fromMail;
 
     @ApiModelProperty(value = "邮件主题")
     private String subject;

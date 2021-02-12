@@ -1,0 +1,55 @@
+server:
+  port: 6008
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      discovery:
+        locator:
+          # 开启服务发现路由
+          enabled: true
+          # 开启服务路由名小写
+          lower-case-service-id: true
+      # 路由设置
+      routes:
+        # 博客服务路由
+        - id: service-blog
+          uri: lb://service-blog
+          predicates:
+            - Path=/api/blog/**
+        # 邮件服务路由
+        - id: service-mds
+          uri: lb://service-mds
+          predicates:
+            - Path=/api/mds/**
+        # 对象存储服务路由
+        - id: service-oss
+          uri: lb://service-oss
+          predicates:
+            - Path=/api/oss/**
+        # 站点服务路由
+        - id: service-site
+          uri: lb://service-site
+          predicates:
+            - Path=/api/site/**
+        # 统计服务路由
+        - id: service-sta
+          uri: lb://service-sta
+          predicates:
+            - Path=/api/sta/**
+        # 用户中心服务路由
+        - id: service-ucenter
+          uri: lb://service-ucenter
+          predicates:
+            - Path=/api/ucenter/**
+        # 权限管理服务路由
+        - id: service-acl
+          uri: lb://service-acl
+          predicates:
+            - Path=/admin/acl/**
+

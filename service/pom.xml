@@ -18,6 +18,7 @@
         <module>service_oss</module>
         <module>service_site</module>
         <module>service_mds</module>
+        <module>service_acl</module>
     </modules>
 
     <dependencies>

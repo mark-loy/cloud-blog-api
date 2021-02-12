@@ -27,7 +27,4 @@ public class TagFormVO implements Serializable {
     @NotBlank(message = "标签名不能为空", groups = {Group.Add.class, Group.Update.class})
     private String name;
 
-    @ApiModelProperty(value = "文章数量")
-    @Min(value = 0, message = "文章数不能为负", groups = {Group.Update.class})
-    private Integer articleCount;
 }

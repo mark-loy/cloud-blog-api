@@ -3,6 +3,7 @@ package com.mark.mds.service;
 import com.mark.base.vo.CommentMailRpcVO;
 import com.mark.mds.entity.Mail;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mark.mds.entity.vo.SiteNoticeVO;
 
 /**
  * <p>
@@ -25,4 +26,10 @@ public interface MailService extends IService<Mail> {
      * @param commentMailVO 评论邮件实体
      */
     void sendCommentMail(CommentMailRpcVO commentMailVO);
+
+    /**
+     * 发送站点通知邮件
+     * @param siteNoticeVO 通知邮件实体
+     */
+    void sendNoticeMail(SiteNoticeVO siteNoticeVO);
 }

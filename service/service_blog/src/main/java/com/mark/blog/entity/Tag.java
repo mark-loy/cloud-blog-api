@@ -34,9 +34,6 @@ public class Tag implements Serializable {
     @ApiModelProperty(value = "分类名称")
     private String name;
 
-    @ApiModelProperty(value = "文章数量")
-    private Integer articleCount;
-
     @ApiModelProperty(value = "逻辑删除;0.表示未删除，1.表示已删除")
     @TableLogic
     private Boolean isDeleted;

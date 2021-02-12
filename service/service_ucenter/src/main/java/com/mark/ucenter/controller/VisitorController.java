@@ -55,7 +55,7 @@ public class VisitorController {
      * @return Result
      */
     @ApiOperation("修改访客状态")
-    @PutMapping("/{vid}}")
+    @PutMapping("/{vid}")
     public Result updateVisitorState(@ApiParam("访客id") @PathVariable("vid") String vid,
                                      @ApiParam("访客状态") @RequestParam("status") Boolean status) {
         Visitor visitor = new Visitor();

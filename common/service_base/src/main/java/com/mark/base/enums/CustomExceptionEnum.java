@@ -31,6 +31,7 @@ public enum CustomExceptionEnum {
     VISITOR_LOGIN_ERROR(20004, "登录参数不完整"),
     VISITOR_EXIST(20004, "访客已注册"),
     VISITOR_NO_EXIST(20004, "访客不存在"),
+    USER_NO_EXIST(20004, "用户不存在"),
     PASSWORD_ERROR(20004, "密码错误"),
     VISITOR_BAN(20004, "该账户已禁用"),
 
@@ -39,7 +40,12 @@ public enum CustomExceptionEnum {
      */
     CODE_NOT_EXIST(20005, "验证码不存在"),
     CODE_NO_CORRECT(20005, "验证码不正确"),
-    STATE_NO_MATCH(20005, "状态码不匹配")
+    STATE_NO_MATCH(20005, "状态码不匹配"),
+
+    /*
+    *  邮件相关
+    */
+    MAIL_SEND_FAIL(20006, "邮件发送失败")
     ;
 
 

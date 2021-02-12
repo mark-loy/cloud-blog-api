@@ -46,3 +46,12 @@ spring:
     protocol: smtp
     default-encoding: utf-8
     subject: 小码客个人博客网站
+    siteUrl: http://localhost:8888/
+
+# mybatis配置
+mybatis-plus:
+  configuration:
+    # 开启mybatis日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #配置mapper.xml文件的路径
+  mapper-locations: classpath:com/mark/mds/mapper/xml/*.xml
